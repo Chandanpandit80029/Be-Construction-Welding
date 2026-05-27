@@ -59,7 +59,6 @@ target/
 .env.test.local
 .env.production.local
 .env.staging.local
-.env.example
 <<<<<<< HEAD
 
 =======
