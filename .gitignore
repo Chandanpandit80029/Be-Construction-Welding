@@ -60,7 +60,10 @@ target/
 .env.production.local
 .env.staging.local
 .env.example
+<<<<<<< HEAD
 
+=======
+>>>>>>> c98d5756bcf66caaf38fbf356bb5c67b9092b177
 
 # Firebase Admin SDK service account keys (CONFIDENTIAL)
 **/serviceAccountKey.json
