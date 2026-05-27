@@ -1,0 +1,263 @@
+# ===========================================
+# Node.js & Dependencies
+# ===========================================
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Yarn / Pnpm / Bun
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.yarn/cache
+.yarn/unplugged
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+.pnpm-store/
+
+# ===========================================
+# Build Outputs
+# ===========================================
+
+# Vite build output
+dist/
+dist-ssr/
+
+# Legacy build outputs
+build/
+release/
+out/
+target/
+
+# TypeScript declaration output
+*.d.ts.map
+*.tsbuildinfo
+
+# ===========================================
+# Environment & Configuration
+# ===========================================
+
+# Environment variables (keep these PRIVATE)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging.local
+
+# Firebase Admin SDK service account keys (CONFIDENTIAL)
+**/serviceAccountKey.json
+**/service-account.json
+**/firebase-adminsdk.json
+
+# Firebase configuration files (generated/temporary)
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+*.cache
+.firebaserc.local
+
+# ===========================================
+# Cloudinary
+# ===========================================
+
+# Cloudinary upload cache (generated at runtime)
+.cloudinary_upload_cache
+
+# ===========================================
+# IDE & Editor Settings
+# ===========================================
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/*.code-snippets
+
+# JetBrains IDEs (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+*~
+.vim/
+*.un~
+Session.vim
+.netrwhist
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+bin/
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+
+# ===========================================
+# OS-Generated Files
+# ===========================================
+
+# macOS / Linux
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===========================================
+# Logs & Debug Files
+# ===========================================
+
+# Application logs
+*.log
+logs/
+debug.log
+lerna-debug.log*
+
+# NPM logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===========================================
+# Cache & Temp Files
+# ===========================================
+
+# Vite / Webpack / Rollup caches
+.cache
+.temp
+
+# Parcel
+.parcel-cache/
+
+# Babel
+babel.config.*.cache
+
+# ESLint / Prettier
+.eslintcache
+.prettiercache
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ===========================================
+# Test & Coverage
+# ===========================================
+
+# Test artifacts
+coverage/
+.coverage
+nyc_output/
+junit.xml
+*.test.js.snap
+*.test.ts.snap
+__snapshots__/
+
+# Cypress / Playwright
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+test-results/
+
+# ===========================================
+# Production & Deployment
+# ===========================================
+
+# Firebase hosting deploy artifacts
+.firebase/
+*-debug.log
+
+# Environment-specific configs (keep secrets out)
+*.local
+
+# ===========================================
+# Server / API Files
+# ===========================================
+
+# Node.js server uploads (generated at runtime)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Python virtual env (if any backend scripts)
+venv/
+.env/
+
+# ===========================================
+# Misc / Project-Specific
+# ===========================================
+
+# Vite's built-in type acquisition
+*.d.ts.types
+
+# Local Netlify functions
+.netlify/
+
+# Serverless framework
+.serverless/
+
+# ===========================================
+# Keep These Tracked (negated patterns)
+# ===========================================
+
+# These files are intentionally tracked
+!.env.example
+!.env.sample

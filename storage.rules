@@ -1,0 +1,145 @@
+rules_version = '2';
+
+// =============================================================================
+// BE Construction & Welding Works - Firebase Storage Security Rules
+// =============================================================================
+// 
+// This file controls access to Firebase Storage buckets for image/media uploads.
+// When using Cloudinary for image storage, Firebase Storage is used as a backup
+// or for temporary file processing.
+//
+// Folders:
+//   /projects/       - Project images
+//   /gallery/        - Gallery images  
+//   /team/           - Team member photos
+//   /temp/           - Temporary uploads (auto-delete after 24h)
+//   /uploads/        - Quote request file attachments
+// =============================================================================
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // =========================================================================
+    // HELPER FUNCTIONS
+    // =========================================================================
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user is admin via Firestore
+    function isAdmin() {
+      return isAuthenticated()
+        && firestore.exists(
+          /databases/(default)/documents/users/$(request.auth.uid)
+        )
+        && firestore.get(
+          /databases/(default)/documents/users/$(request.auth.uid)
+        ).data.role == 'admin';
+    }
+
+    // Validate image file types
+    function isImageFile() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    // Validate document file types
+    function isDocumentFile() {
+      return request.resource.contentType.matches('application/(pdf|msword|vnd.openxmlformats-officedocument.wordprocessingml.document)')
+        || request.resource.contentType.matches('image/.*');
+    }
+
+    // Validate file size (10 MB max)
+    function isValidFileSize() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // =========================================================================
+    // PROJECT IMAGES
+    // Admin only can upload, anyone can download
+    // =========================================================================
+
+    match /projects/{fileName} {
+      // Anyone can view project images
+      allow read: if true;
+      
+      // Only admin can upload project images
+      allow create: if isAdmin() 
+        && isImageFile() 
+        && isValidFileSize();
+      
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // GALLERY IMAGES
+    // Admin only can upload, anyone can download
+    // =========================================================================
+
+    match /gallery/{fileName} {
+      allow read: if true;
+      
+      allow create: if isAdmin() 
+        && isImageFile() 
+        && isValidFileSize();
+      
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // TEAM MEMBER PHOTOS
+    // Admin only can upload, anyone can download
+    // =========================================================================
+
+    match /team/{fileName} {
+      allow read: if true;
+      
+      allow create: if isAdmin() 
+        && isImageFile() 
+        && isValidFileSize();
+      
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // QUOTE REQUEST ATTACHMENTS
+    // Authenticated users can upload, admin can read all
+    // =========================================================================
+
+    match /uploads/{fileName} {
+      // Admin can view all uploads
+      allow read: if isAdmin();
+      
+      // Authenticated users can upload documents/images
+      allow create: if isAuthenticated()
+        && (isImageFile() || isDocumentFile())
+        && isValidFileSize();
+      
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // TEMPORARY UPLOADS
+    // Anyone can upload, admin can manage
+    // Note: Set up a lifecycle rule in Firebase Console to auto-delete
+    // files in /temp/ after 24 hours
+    // =========================================================================
+
+    match /temp/{fileName} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated() && isValidFileSize();
+      allow delete: if isAdmin() || request.auth != null;
+    }
+
+    // =========================================================================
+    // GLOBAL DEFAULTS
+    // Deny all other paths by default
+    // =========================================================================
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

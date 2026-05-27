@@ -1,0 +1,106 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =============================================================================
+    // HELPER FUNCTIONS
+    // =============================================================================
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuth();
+    }
+
+    // =============================================================================
+    // ADMINS - Auth users can verify admin status
+    // =============================================================================
+    match /admins/{userId} {
+      allow read: if true;       // Public read for admin verification
+      allow write: if isAuth();
+    }
+
+    // =============================================================================
+    // PUBLIC WEBSITE DATA - Anyone can read, only authenticated users can write
+    // =============================================================================
+    match /projects/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /services/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /gallery/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /testimonials/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /teamMembers/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /blogPosts/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /heroSlides/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /seoSettings/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /websiteSettings/{document=**} { allow read: if true; allow write: if isAuth(); }
+    match /FAQs/{document=**} { allow read: if true; allow write: if isAuth(); }
+
+    // =============================================================================
+    // FORM SUBMISSIONS - Public users can create, only admins can read/update/delete
+    // =============================================================================
+    match /inquiries/{document=**} {
+      allow create: if true;       // Public users can submit inquiries
+      allow read, update, delete: if isAuth();
+    }
+
+    match /quotes/{document=**} {
+      allow create: if true;       // Public users can request quotes
+      allow read, update, delete: if isAuth();
+    }
+
+    // =============================================================================
+    // QUOTE REQUESTS COLLECTION - Public create, admin read/update/delete
+    // =============================================================================
+    match /quoteRequests/{document=**} {
+      allow create: if true;       // Public users can submit quote requests
+      allow read: if isAuth();     // Only authenticated admins can view
+      allow update: if isAuth();   // Only authenticated admins can update
+      allow delete: if isAuth();   // Only authenticated admins can delete
+    }
+
+    match /newsletter/{document=**} {
+      allow create: if true;       // Public users can subscribe
+      allow read, update, delete: if isAuth();
+    }
+
+    // =============================================================================
+    // ANALYTICS - Page views are public writes, reading is admin-only
+    // =============================================================================
+    match /analytics/{document=**} {
+      allow create: if true;       // Public page tracking
+      allow read, update, delete: if isAuth();
+    }
+
+    match /pageViews/{document=**} {
+      allow create: if true;       // Public page view tracking
+      allow read, update, delete: if isAuth();
+    }
+
+    // =============================================================================
+    // ACTIVITY LOGS - Public create (logged from client), admin read/delete
+    // =============================================================================
+    match /activityLogs/{document=**} {
+      allow create: if true;       // Activities can be logged from client
+      allow read, update, delete: if isAuth();
+    }
+
+    // =============================================================================
+    // ADMIN DASHBOARD COLLECTIONS - Only authenticated users can access
+    // =============================================================================
+    match /users/{document=**} { allow read, write: if isAuth(); }
+    match /notifications/{document=**} { allow read, write: if isAuth(); }
+    match /contactInfo/{document=**} { allow read, write: if isAuth(); }
+
+    // =============================================================================
+    // SYSTEM COLLECTIONS
+    // =============================================================================
+    match /system/{document=**} { allow read, write: if isAuth(); }
+
+    // =============================================================================
+    // GLOBAL DENY - Fallback for any unmatched paths
+    // =============================================================================
+    match /{document=**} { allow read, write: if false; }
+  }
+}
